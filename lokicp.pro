@@ -34,3 +34,5 @@ win32 {
     HEADERS += src/process/WindowsLokinetProcessManager.hpp
     SOURCES += src/process/WindowsLokinetProcessManager.cpp
 }
+
+RC_ICONS = res/images/icons/icon.ico
