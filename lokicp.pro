@@ -36,3 +36,4 @@ win32 {
 }
 
 RC_ICONS = res/images/icons/icon.ico
+ICON = res/images/icons/Loki.icns
