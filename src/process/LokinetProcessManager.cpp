@@ -109,17 +109,19 @@ bool LokinetProcessManager::managedStopLokinetProcess()
     m_managedThreadRunning = true;
 
     std::thread t([this]() {
-        if (not stopLokinetProcess())
-        {
-            m_managedThreadRunning = false;
-            qDebug("stopLokinetProcess() failed in managed stop thread");
-            return;
-        }
 
-        qDebug() << "Waiting for "
+        // attempt graceful stop
+        bool gracefullStopSucceeded =  stopLokinetProcess();
+
+        if (! gracefullStopSucceeded) {
+            qDebug("warning: stopLokinetProcess() failed in managed stop thread");
+        } else {
+
+            qDebug() << "Waiting for "
                  << std::chrono::milliseconds(MANAGED_KILL_WAIT).count()
                  << "ms for graceful lokinet exit...";
-        std::this_thread::sleep_for(MANAGED_KILL_WAIT);
+            std::this_thread::sleep_for(MANAGED_KILL_WAIT);
+        }
 
         if (queryProcessStatus() == ProcessStatus::Running)
         {
